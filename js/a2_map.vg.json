@@ -1,0 +1,45 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Total Vaccinations ",
+    "width": "container",
+    
+    "projection": {"type": "equirectangular"},
+    "data": {
+    "url": "https://raw.githubusercontent.com/allenliu2021/3179-testrepo/main/11ne_110m_admin_0_countries.topojson",
+    "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+    },
+    "transform": [
+    {
+    "lookup": "properties.NAME",
+    "from": {
+    "data": {
+    "url": "https://raw.githubusercontent.com/allenliu2021/3179_test/main/A2_map_data_new1.csv"
+    },
+    "key": "location",
+    "fields": ["total_vaccinations", "population"]
+    }
+    },
+    {"calculate": "datum.total_vaccinations/datum.population * 100", "as": "Total vaccinations per 100"}
+    ],
+    "mark": {"type": "geoshape"},
+    "encoding": {
+    "color": {
+    "field": "Total vaccinations per 100",
+    "type": "quantitative",
+    "scale": {
+    "type": "threshold",
+    "domain": [ 1,40,80,120],
+    "range": ["#edf8fb",
+        "#b2e2e2",
+        "#66c2a4",
+        "#2ca25f",
+        "#006d2c"]
+    }
+    },
+    "tooltip": [
+    {"field": "properties.NAME", "type": "nominal", "title": "location"},
+    {"field":"total_vaccinations","type":"quantitative"},
+    {"field": "Total vaccinations per 100", "type": "quantitative", "format": ".2f"}
+    ]
+    }
+   }
